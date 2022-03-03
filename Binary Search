@@ -1,0 +1,38 @@
+#  Find 1st position of target, return -1 if not found
+#  How about last position, any position?
+
+### Iterative:
+def bi_search_iter(alist, item):
+    left, right = 0, len(alist) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if alist[mid] < item:
+            left = mid + 1
+        elif alist[mid] > item:
+            right = mid - 1
+        else: # alist[mid] = item
+            return mid
+    return -1
+
+
+### Template
+def binarysearch(alist, item):
+    if len(alist) == 0:
+        return -1
+    
+    left, right = 0, len(alist) - 1
+    while left + 1 < right:
+        mid = left + (right - left) // 2
+        if alist[mid] == item:
+            right = mid
+        elif alist[mid] < item:
+            left = mid
+        elif alist[mid] > item:
+            right = mid
+    
+    if alist[left] == item:
+        return left
+    if alist[right] == item:
+        return right
+    
+    return -1
