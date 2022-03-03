@@ -1,0 +1,17 @@
+def search_first(alist):
+    left, right = 0, 1
+    
+    while alist[right] == 0:
+        left = right
+        right *= 2
+        
+        if (right > len(alist)):
+            right = len(alist) - 1
+            break
+    
+    return left + search_range(alist[left:right+1], 1)[0]
+    
+    
+#### implement
+alist = [0, 0, 0, 0, 0, 1]
+r = search_first(alist)
