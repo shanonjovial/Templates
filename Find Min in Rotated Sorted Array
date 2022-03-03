@@ -1,16 +1,16 @@
-# O(nlgn)
+#### O(nlgn)
 def searchlazy(alist):
     alist.sort()
     return alist[0]
 
-# O(n)
+#### O(n)
 def searchslow(alist):
     mmin = alist[0]
     for i in alist:
         mmin = min(mmin, i)
     return mmin 
         
-# O(lgn)
+#### O(lgn)
 def search(alist):
     if len(alist) == 0:
         return -1    
@@ -24,3 +24,32 @@ def search(alist):
         else:
             right = mid
     return alist[left] if alist[left] < alist[right] else alist[right]
+
+
+#### O(lgn)
+def search(alist, target):
+    if len(alist) == 0:
+        return -1    
+    left, right = 0, len(alist) - 1
+    while left + 1 < right: 
+        mid = left + (right - left) // 2
+        if alist[mid] == target:
+            return mid
+        
+        if (alist[left] < alist[mid]):
+            if alist[left] <= target and target <= alist[mid]:
+                right = mid
+            else:
+                left = mid
+        else:
+            if alist[mid] <= target and target <= alist[right]:
+                left = mid
+            else: 
+                right = mid
+                            
+    if alist[left] == target:
+        return left
+    if alist[right] == target:
+        return right
+        
+    return -1
