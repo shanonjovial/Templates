@@ -1,0 +1,84 @@
+#### Given an array of 2n elements in the following format { a1, a2, a3, a4, ….., an, b1, b2, b3, b4, …., bn }. The task is shuffle the array to {a1, b1, a2, b2, a3, b3, ……, an, bn } without using extra space.
+### ** Examples: **
+###  Input : arr[] = { 1, 2, 9, 15 } 
+###  Output : 1 9 2 15
+###  Input : arr[] = { 1, 2, 3, 4, 5, 6 }
+###  Output : 1 4 2 5 3 6
+
+####** Solution: Brute Force #### O(n^2)
+## A brute force solution involves two nested loops to rotate the elements in the second half of the array to the left. The first loop runs n times to cover all elements in the second half of the array. The second loop rotates the elements to the left. Note that the start index in the second loop depends on which element we are rotating and the end index depends on how many positions we need to move to the left.
+
+def shuffleArray(a, n):
+    # Rotate the element to the left
+    i, q, k = 0, 1, n
+    while(i < n):     
+        
+        j = k 
+        while(j > i + q):
+            print(i, j, q, k)
+            a[j - 1], a[j] = a[j], a[j - 1]
+            j -= 1
+        for ii in range(0, 2 * n): 
+            print(a[ii], end = " ")
+        print()
+        i += 1
+        k += 1
+        q += 1
+
+
+#### OPTION 2 - ** Solution: Divide and Conquer #### O(n log n)
+## Let the array be a1, a2, a3, a4, b1, b2, b3, b4
+## Split the array into two halves: a1, a2, a3, a4 : b1, b2, b3, b4
+## Exchange element around the center: exchange a3, a4 with b1, b2 correspondingly.
+## you get: a1, a2, b1, b2, a3, a4, b3, b4
+## Recursively spilt a1, a2, b1, b2 into a1, a2 : b1, b2
+## then split a3, a4, b3, b4 into a3, a4 : b3, b4.
+## Exchange elements around the center for each subarray we get: a1, b1, a2, b2 and a3, b3, a4, b4.
+
+def shufleArray(a, left, right):
+ 
+    # If only 2 element, return
+    if (right - left == 1):
+        return
+ 
+    # Finding mid to divide the array
+    mid = (left + right) // 2
+ 
+    # Using temp for swapping first half of second array
+    temp = mid + 1
+ 
+    # Mid is use for swapping second half for first array
+    mmid = (left + mid) // 2
+ 
+    # Swapping the element
+    for i in range(mmid + 1, mid + 1):
+        (a[i], a[temp]) = (a[temp], a[i])
+        temp += 1
+ 
+    # Recursively doing for first half and second half
+    shufleArray(a, left, mid)
+    shufleArray(a, mid + 1, right)
+
+
+#### OPTION 3: One Pass ####
+## We know that the first and last numbers don’t move from their places. And, we keep track of the index from which any number is picked and where the target index is. We know that, if we’re picking ai, it has to go to the index 2 * i – 1 and if bi, it has to go 2 * i. We can check from where we have picked a certain number based on the picking index if it greater or less than n.
+## We will have to do this for 2 * n – 2 times, assuming that n = half of length of array.
+## We, get two cases, when n is even and odd, hence we initialize appropriately the start variable.
+
+def shuffleArray(a):
+    n = len(a) // 2
+    start = n + 1
+    j = n + 1
+    done = 0
+    
+    while (done < 2 * n - 2):
+        #print(done, start, j)
+        if (start == j):
+            start = start - 1
+            j = j - 1
+        done += 1
+        
+        i = j - n if j > n else j
+        j = 2 * i if j > n else 2 * i - 1
+        
+        a[start], a[j] = a[j], a[start]
