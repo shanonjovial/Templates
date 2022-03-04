@@ -1,0 +1,16 @@
+## Given a sorted array, two integers k and x, find the k closest elements to x in the array. The result should also be sorted in ascending order. If there is a tie, the smaller elements are always preferred.
+
+#### OPTION 1 ####
+def findClosestElements(alist, k, x):
+    left = right = bisect.bisect_left(alist, x)
+    while right - left < k:
+        if left == 0: return alist[:k]
+        if right == len(alist): return alist[-k:]
+        if x - alist[left - 1] <= alist[right] - x: left -= 1
+        else: right += 1
+    return alist[left:right]
+    
+#### OPTION 2 ####
+def findClosestElements(self, arr, k, x):
+    diffTuples = sorted((abs(x - num), num) for num in arr)
+    return sorted(map(lambda x: x[1], diffTuples[:k])) #prefer the smaller number for same diff.
