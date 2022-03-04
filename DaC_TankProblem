@@ -1,0 +1,58 @@
+### Given a tank with capacity C liters which is completely filled in starting. Everyday tank is filled with l liters of water and in the case of overflow extra water is thrown out. Now on i-th day i liters of water is taken out for drinking. We need to find out the day at which tank will become empty the first time.
+### Examples:
+### Input : Capacity = 5, l = 2
+### Output : 4
+## At the start of 1st day, water in tank = 5 and at the end of the 1st day = (5 - 1) = 4
+## At the start of 2nd day, water in tank = 4 + 2 = 6 but tank capacity is 5 so water = 5 and at the end of the 2nd day = (5 - 2) = 3
+## At the start of 3rd day, water in tank = 3 + 2 = 5 and at the end of the 3rd day = (5 - 3) = 2
+## At the start of 4th day, water in tank = 2 + 2 = 4 and at the end of the 4th day = (4 - 4) = 0
+## So final answer will be 4
+
+### ** Solution **
+## We can see that tank will be full for starting (l + 1) days because water taken out is less than water being filled. After that, each day water in the tank will be decreased by 1 more liter and on (l + 1 + i)th day (C – (i)(i + 1) / 2) liter water will remain before taking drinking water.
+## Now we need to find a minimal day (l + 1 + K), in which even after filling the tank by l liters we have water less than l in tank i.e. on (l + 1 + K – 1)th day tank becomes empty so our goal is to find minimum K such that,
+##   C – K(K + 1) / 2 <= l
+
+
+#### OPTION 1 ####
+# Utility method to get sum of first n numbers
+def getCumulateSum(n):
+    return (n * (n + 1)) // 2
+ 
+ 
+# Method returns minimum number of days after  which tank will become empty
+def minDaysToEmpty(C, l):
+ 
+    # if water filling is more than capacity then after C days only tank will become empty
+    if (C <= l) : return C 
+ 
+    # initialize binary search variable
+    lo, hi = 0, 1e4
+ 
+    # loop until low is less than high
+    while (lo < hi): 
+        mid = int((lo + hi) / 2)
+ 
+        # if cumulate sum is greater than (C - l) then search on left side
+        if (getCumulateSum(mid) >= (C - l)): 
+            hi = mid
+         
+        # if (C - l) is more then search on right side
+        else:
+            lo = mid + 1   
+     
+    # Final answer will be obtained by adding l to binary search result
+    return (l + lo)
+
+
+#### OPTION 2 ####
+import math
+def solve(a, b, c):
+    r = pow(b, 2) - 4 * a * c
+    if (r < 0):
+        raise ValueError("No Solution") 
+    return (-b + math.sqrt(r)) / (2 * a)
+
+def minDaysToEmpty(C, l):
+    co = -2 * (C - l)
+    return  math.ceil(solve(1, 1, co)) + l
