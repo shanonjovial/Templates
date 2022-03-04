@@ -1,0 +1,41 @@
+###### Given two sorted arrays. 
+## There is only 1 difference between the arrays. First array has one element extra added in between. 
+## Find the *index* of the extra element.
+## Examples:
+## Input : {2, 4, 6, 8, 9, 10, 12};
+##       {2, 4, 6, 8, 10, 12};
+## Output : 4
+## The first array has an extra element 9.
+## The extra element is present at index 4.
+## Input :  {3, 5, 7, 9, 11, 13}
+##         {3, 5, 7, 11, 13}
+## Output :  3
+
+##### OPTION 1 #####
+## Returns index of extra element in arr1[].
+def find_extra(arr1, arr2):
+    for i in range(len(arr2)):
+        if (arr1[i] != arr2[i]):
+            return i
+ 
+    return len(arr1)-1
+
+##### OPTION 2 #####
+def find_extra_fast(arr1, arr2):
+    index = len(arr2)
+    # left and right are end points denoting the current range.
+    left, right = 0, len(arr2) - 1
+    while (left <= right):
+        mid = (left + right) // 2;
+ 
+        # If middle element is same of both arrays, it means that extra element is after mid so we update left to mid+1
+        if (arr2[mid] == arr1[mid]):
+            left = mid + 1
+ 
+        # If middle element is different of the arrays, it means that the index we are searching for is either mid, or before mid. Hence we update right to mid-1.
+        else:
+            index = mid
+            right = mid - 1;
+ 
+    # when right is greater than left our search is complete.
+    return index
