@@ -23,3 +23,28 @@ def removeDuplicates(alist):
             alist[i] = n
             i += 1
     return i
+
+
+####  What if duplicates are allowed at most twice? ####
+
+#### OPTION 1 ####
+def removeDuplicates(nums):
+    if len(nums) <= 2: return len(nums)
+    prev, curr = 1, 2
+    while curr < len(nums):
+        if nums[curr] == nums[prev] and  nums[curr] == nums[prev - 1]:
+            curr += 1
+        else:
+            prev += 1
+            nums[prev] = nums[curr]
+            curr += 1
+    return prev + 1
+
+#### OPTION 2 ####
+def removeDuplicates2(nums):
+    count = 0
+    for i in range(len(nums)):
+        if count < 2 or nums[count - 2] != nums[i]:
+            nums[count] = nums[i]
+            count += 1
+    return count
