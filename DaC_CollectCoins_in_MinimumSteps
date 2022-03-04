@@ -1,0 +1,24 @@
+#### Given many stacks of coins which are arranged adjacently. We need to collect all these coins in the minimum number of steps where in one step we can collect one horizontal line of coins or vertical line of coins and collected coins should be continuous.
+## Examples:
+## Input : height[] = [2 1 2 5 1]
+## Each value of this array corresponds to the height of stack that is we are given five stack of coins, where in first stack 2 coins are there then in second stack 1 coin is there and so on.
+## Output : 4
+## We can solve this problem using divide and conquer method. We can see that it is always beneficial to remove horizontal lines from below. Suppose we are working on stacks from l index to r index in a recursion step, each time we will choose minimum height, remove those many horizontal lines after which stack will be broken into two parts, l to minimum and minimum +1 till r and we will call recursively in those subarrays. Another thing is we can also collect coins using vertical lines so we will choose minimum between the result of recursive calls and (r – l) because using (r – l) vertical lines we can always collect all coins.
+
+def minSteps(height):
+    
+    def minStepHelper(height, left, right, h):
+        if left >= right:
+            return 0
+        
+        m = left
+        for i in range(left, right):
+            if height[i] < height[m]:
+                m = i
+         
+        return min(right - left, 
+                   minStepHelper(height, left, m, height[m]) +
+                   minStepHelper(height, m + 1, right, height[m]) +
+                   height[m] - h)
+    
+    return minStepHelper(height, 0, len(height), 0)    
