@@ -1,0 +1,86 @@
+#### You are given two integers x and y. Both have a length of length n digits. 
+#### You want to find the product of these two numbers. So you want to find z in: z = x * y
+#### The size of the problem is n. The more digits in x and y the harder the problem.
+
+
+#### OPTION 1 ####
+# third_grade_algorithm.py
+import functools
+def prod(x, y):
+    # x, y are strings --> returns a string of x*y
+    return str(eval("%s * %s" % (x, y)))
+
+def plus(x, y):
+    # x, y are strings --> returns a string of x+y
+    return str(eval("%s + %s" % (x, y)))
+
+def one_to_n_product(d, x):
+    """d is a single digit, x is n-digit --> returns a string of d*x
+    """
+    print(d, x)
+    result = ""
+    carry = "0"
+    for i, digit in enumerate(reversed(x)):
+        #print("d: ", d, "  digit: ", digit)
+        r = plus(prod(d, digit), carry)
+        #print("r: ", r)
+        if (len(r) == 1):
+            carry = '0'
+        else:
+            carry = r[:-1]
+        digit = r[-1]
+        #print("   c: ", carry, "  d: ", digit)
+        result = digit + result
+    
+    
+    return carry + result
+
+def sum_middle_products(middle_products):
+    # middle_products is a list of strings --> returns a string
+    max_length = max([len(md) for md in middle_products])
+    for i, md in enumerate(middle_products):
+        middle_products[i] = "0" * (max_length - len(md)) + md
+ 
+    print(middle_products)
+    carry = "0"
+    result = ""
+    for i in range(1, max_length + 1):
+        row = [carry] + [md[-i] for md in middle_products]
+        r = functools.reduce(plus, row)
+        carry, digit = r[:-1], r[-1]
+        result = digit + result
+    return carry + result
+
+
+def algorithm(x, y):
+    x, y = str(x), str(y)
+    middle_products = []
+    for i, digit in enumerate(reversed(y)):
+        middle_products.append(one_to_n_product(digit, x) + "0" * i)
+    print(middle_products)
+    return int(sum_middle_products(middle_products))
+    
+    
+#### OPTION 2 ####
+def karatsuba(x,y):
+    """Function to multiply 2 numbers in a more efficient manner than the grade school algorithm"""
+    if len(str(x)) == 1 or len(str(y)) == 1:
+        return x*y
+    else:
+        n = max(len(str(x)),len(str(y)))
+        nby2 = n // 2
+
+        a = x // 10**(nby2)
+        b = x % 10**(nby2)
+        c = y // 10**(nby2)
+        d = y % 10**(nby2)
+
+        ac = karatsuba(a,c)
+        bd = karatsuba(b,d)
+        ad_plus_bc = karatsuba(a+b,c+d) - ac - bd
+
+            # this little trick, writing n as 2*nby2 takes care of both even and odd n
+        prod = ac * 10**(2*nby2) + (ad_plus_bc * 10**nby2) + bd
+
+        return prod
+     
