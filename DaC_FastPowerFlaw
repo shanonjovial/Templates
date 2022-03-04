@@ -1,0 +1,21 @@
+#### OPTION 1 ####
+def fast_power_flaw(x, n):
+    if n <= 0:
+        return 1
+    elif n == 1:
+        return x
+    elif n % 2:
+        return fast_power_flaw(x * x, n // 2) * x
+    else:
+        return fast_power_flaw(x * x, n // 2) 
+        
+#### OPTION 2 ####
+def fast_power(x, n):    ## x 可能为0， n 可能为负， 为1， 为0
+    if n==0:
+        return 1
+    elif n<0:
+        return 1/fast_power(x,-n)
+    elif n%2:
+        return fast_power(x*x, n//2) *x
+    else:
+        return fast_power(x*x, n//2)
