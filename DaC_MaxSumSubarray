@@ -1,0 +1,55 @@
+##### Find the sum of contiguous subarray within a one-dimensional array of numbers which has the largest sum.
+
+
+#### OPTION 1 ####
+# O(n^2)
+def subarray1(alist):
+    result = -sys.maxsize
+    for i in range(0, len(alist)):
+        sum = 0
+        for j in range (i, len(alist)):
+            sum += alist[j]
+            if sum > result:
+                result = sum
+    return result
+ 
+ #### OPTION 2 ####
+ # O(n lgn)
+def subarray2(alist):
+    return subarray2_helper(alist, 0, len(alist)-1)
+
+def subarray2_helper(alist, left, right):
+    if (left == right):
+        return alist[left]
+    mid = (left + right) // 2
+    return max(subarray2_helper(alist, left, mid), 
+               subarray2_helper(alist, mid+1, right), 
+               maxcrossing(alist, left, mid, right))
+
+def maxcrossing(alist, left, mid, right):
+    sum = 0
+    left_sum = -sys.maxsize
+    for i in range (mid, left-1, -1):
+        sum += alist[i]
+        if (sum > left_sum):
+            left_sum = sum
+            
+    sum = 0
+    right_sum = -sys.maxsize
+    for i in range (mid+1, right+1):
+        sum += alist[i]
+        if (sum > right_sum):
+            right_sum = sum        
+
+    return left_sum + right_sum
+
+
+#### OPTION 3 ####
+# O(n)
+def subarray3(alist):
+    result = -sys.maxsize
+    local = 0
+    for i in alist:
+        local = max(local + i, i)
+        result = max(result, local)
+    return result
