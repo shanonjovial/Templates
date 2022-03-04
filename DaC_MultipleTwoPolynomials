@@ -1,0 +1,26 @@
+#### OPTION 1 ####
+def mults(A, B):
+    m, n = len(A), len(B)
+    result = [0] * (m + n - 1)
+    for i in range (m):
+        for j in range(n):
+            result[i + j] += A[i] * B[j]
+    return result
+
+def printPoly(poly):
+    n = len(poly)
+    show = ""
+    for i in range(n-1, -1, -1):
+        show += str(poly[i])
+        if (i != 0):
+            show = show + "x^" + str(i)
+        if (i != 0):
+            show = show + " + "
+    print(show)
+    
+    
+#### OPTION 2 ####
+from numpy import convolve
+A = [5, 0, 10, 6]
+B = [1, 2, 4]
+convolve(A, B)
