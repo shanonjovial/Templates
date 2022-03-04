@@ -1,0 +1,24 @@
+### Given an array consisting of n integers, find the contiguous subarray of given length k that has the maximum average value. 
+## And you need to output the maximum average value
+## Assume 1 <= k <= n
+
+#### OPTION 1 ####
+def findMaxnumsverage(nums, K):
+    P = [0]
+    for x in nums:
+        P.append(P[-1] + x)
+
+    moving_sum = max(P[i+K] - P[i] 
+             for i in range(len(nums) - K + 1))
+    return moving_sum / float(K)
+    
+#### OPTION 2 ####
+def findMaxnumsverage(nums, K):
+    moving_sum = 0.0
+    for i in range(K):
+        moving_sum += nums[i]
+    res = moving_sum
+    for i in range(K, len(nums)):
+        moving_sum += nums[i] - nums[i - K]
+        res = max(res, moving_sum)
+    return res / K
