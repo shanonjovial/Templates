@@ -1,0 +1,45 @@
+### Problem: Given two integer arrays arr1 and arr2, and the integer d, return the distance value between the two arrays.
+
+### The distance value is defined as the number of elements arr1[i] such that there is not any element arr2[j] where |arr1[i]-arr2[j]| <= d.
+
+#### Questions: 
+## - any duplicates? 
+## - any edge case?
+## - is it sorted?
+
+############################### Use Collections.counter and set ##############################
+from collections import Counter
+
+class Solution:
+  def findTheDistanceValue(self, arr1, arr2, d):
+    arr1, arr2 = Counter(arr1), set(arr2)
+    count =0
+    
+    for i in arr1:
+      target = range(i-d, i+d+1)
+      if not arr2.intersection(target):
+        count +=arr1[i]
+    return count
+    
+################################ Oneline Brute Force #########################################3
+return sum(all(abs(a-b)>d for b in arr2) for a in arr1)
+
+#################### Binary Search ##########################################
+class Solution:
+  def findTheDistanceValue(self, arr1, arr2, d):
+      arr2.sort()
+      
+      def is_valid(val):
+        l, r = 0, len(arr2)
+        while l<r:
+          mid = (l+r) //2
+          if abs(arr2[mid] -val) <=d:
+            return False
+          elif arr2[mid]>val:
+            r=mid
+          else:
+            l = mid+1
+        return True
+        
+        return sum(is_valid(x) for x in arr1)
+
