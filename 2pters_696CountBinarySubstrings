@@ -1,0 +1,26 @@
+######## 2 Pointers ###########
+class Solution(object):
+    def countBinarySubstrings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        mp, consecutive, count = [], 1, 0
+        for i in range(1, len(s)):
+            if s[i] == s[i-1]:
+                consecutive +=1
+            else:
+                mp.append(consecutive)
+                consecutive =1
+        mp.append(consecutive)
+        
+        for i in range(1, len(mp)):
+            count += min(mp[i], mp[i-1])
+        return count
+        
+        
+#########  Concise Lines, also 2 pointers ######       
+class Solution(object):
+    def countBinarySubstrings(self, s):
+        s = map(len, s.replace('01', '0 1').replace('10', '1 0').split())
+        return sum(min(a, b) for a, b in zip(s, s[1:]))
