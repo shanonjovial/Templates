@@ -64,3 +64,17 @@ Order by 3 desc, 1
 
 
 ########### SQL Project Planning ###########
+
+Select Distinct K1.Start_Date, min(K2.End_Date) as End_D
+From
+(SELECT Start_Date 
+FROM Projects
+Where Start_Date  not in (Select distinct End_Date from Projects)
+Order by 1) K1
+Join 
+    (Select End_Date
+     From Projects
+     Where End_Date not in (Select distinct Start_Date from Projects)) K2
+on K1.Start_Date < K2.End_Date
+Group by Start_Date
+Order by DATEDIFF(End_D, Start_Date), Start_Date
