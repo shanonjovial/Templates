@@ -14,4 +14,35 @@ Where counts>1
 Order by counts DESC, 1 
 
 
-########
+######## Ollivander's Inventory ##########
+## Harry Potter and his friends are at Ollivander's with Ron, finally replacing Charlie's old broken wand.
+## Hermione decides the best way to choose is by determining the minimum number of gold galleons needed to buy each non-evil wand of high power and age. Write a query to print the id, age, coins_needed, and power of the wands that Ron's interested in, sorted in order of descending power. If more than one wand has same power, sort the result in order of descending age.
+
+    %%%%%
+SELECT W.id, P.age, W.coins_needed, W.power
+FROM Wands W
+JOIN Wands_Property P
+    on W.code = P.code
+WHERE W.coins_needed = (
+                        SELECT min(coins_needed)
+                        FROM Wands W2 
+                        JOIN Wands_Property P2
+                            on W2.code = P2.code
+                        Where P2.is_evil  =0 and P.age = P2.age and W.power = W2.power
+                        )
+ORDER BY power DESC, age DESC
+
+
+########### Challenge ###############
+## Julia asked her students to create some coding challenges. Write a query to print the hacker_id, name, and the total number of challenges created by each student. Sort your results by the total number of challenges in descending order. If more than one student created the same number of challenges, then sort the result by hacker_id. If more than one student created the same number of challenges and the count is less than the maximum number of challenges created, then exclude those students from the result.
+
+SELECT C.hacker_id, H.name, count(challenge_id) as challenges
+FROM Hackers H
+Join Challenges C
+    on H.hacker_id = C.hacker_id
+Group by H.hacker_id, H.name
+Having challenges = (select count(challenge_id) as counts from challenges group by hacker_id order by counts DESC Limit 1) or 
+        challenges not in (select count(challenge_id) from challenges C1 group by hacker_id having C1.hacker_id <> C.hacker_id)
+Order by challenges DESC, 1
+
+
