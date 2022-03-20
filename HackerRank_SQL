@@ -46,3 +46,21 @@ Having challenges = (select count(challenge_id) as counts from challenges group 
 Order by challenges DESC, 1
 
 
+######### CONTEST LEADERBOARD ##########
+## You did such a great job helping Julia with her last coding contest challenge that she wants you to work on this one, too!
+
+## The total score of a hacker is the sum of their maximum scores for all of the challenges. Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result.
+
+SELECT S.hacker_id, H.name, sum(score) as total_score
+From Hackers H
+Join     
+    (Select hacker_id, max(score) as score
+     From Submissions
+     Group by hacker_id, challenge_id) S
+    on H.hacker_id = S.hacker_id
+Group by S.hacker_id, H.name
+Having total_score >0
+Order by 3 desc, 1
+
+
+########### SQL Project Planning ###########
