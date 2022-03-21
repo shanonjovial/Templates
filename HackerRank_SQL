@@ -51,6 +51,29 @@ Order by challenges DESC, 1
 
 ## The total score of a hacker is the sum of their maximum scores for all of the challenges. Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result.
 
+SELECT C.contest_id, C.hacker_id, C.name, 
+       SUM(S.total_submissions), SUM(S.total_accepted_submissions), 
+       SUM(V.total_views), SUM(V.total_unique_views)
+FROM Contests C
+JOIN Colleges CL ON C.contest_id = CL.contest_id
+JOIN Challenges CLG on CL.college_id = CLG.college_id
+LEFT JOIN (SELECT challenge_id, sum(total_views) as total_views, sum(total_unique_views) as total_unique_views
+      FROM View_Stats 
+      Group by challenge_id
+        ) V on CLG.challenge_id = V.challenge_id
+LEFT JOIN (SELECT challenge_id, sum(total_submissions) as total_submissions, sum(total_accepted_submissions) as total_accepted_submissions
+      FROM Submission_Stats
+      Group by challenge_id
+        ) S on CLG.challenge_id = S.challenge_id
+Group by C.contest_id, C.hacker_id, C.name
+HAVING (SUM(V.total_views)+SUM(total_unique_views) + SUM(total_submissions)+SUM(total_accepted_submissions)) >0
+ORDER BY 1
+
+
+
+
+
+
 SELECT S.hacker_id, H.name, sum(score) as total_score
 From Hackers H
 Join     
@@ -98,4 +121,27 @@ Join Students S on K.ID = S.ID
 ORDER by Fr_Salary
 
 
+###########Symmetric Pairs ######################
+## You are given a table, Functions, containing two columns: X and Y.
+## Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+## Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1.
 
+ SELECT X, Y
+ FROM
+    (SELECT X, Y
+    FROM FUNCTIONS 
+    WHERE X=Y
+    GROUP BY X, Y
+    HAVING COUNT(*) >=2
+
+    Union 
+
+    SELECT F1.X, F1.Y
+    FROM FUNCTIONS F1, FUNCTIONS F2
+    WHERE F1.X < F1.Y AND F1.X = F2.Y AND F1.Y = F2.X) K
+ORDER BY X, Y
+
+
+############################ Interviews #######################################
+## Samantha interviews many candidates from different colleges using coding challenges and contests. Write a query to print the contest_id, hacker_id, name, and the sums of total_submissions, total_accepted_submissions, total_views, and total_unique_views for each contest sorted by contest_id. Exclude the contest from the result if all four sums are .
+## Note: A specific contest can be used to screen candidates at more than one college, but each college only holds  screening contest.
