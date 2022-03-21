@@ -64,17 +64,24 @@ Order by 3 desc, 1
 
 
 ########### SQL Project Planning ###########
+## You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. It is guaranteed that the difference between the End_Date and the Start_Date is equal to 1 day for each row in the table.
 
-Select Distinct K1.Start_Date, min(K2.End_Date) as End_D
-From
-(SELECT Start_Date 
-FROM Projects
-Where Start_Date  not in (Select distinct End_Date from Projects)
-Order by 1) K1
-Join 
-    (Select End_Date
-     From Projects
-     Where End_Date not in (Select distinct Start_Date from Projects)) K2
-on K1.Start_Date < K2.End_Date
-Group by Start_Date
-Order by DATEDIFF(End_D, Start_Date), Start_Date
+SELECT START_DATE, MIN(END_DATE)   ### MIN() can't have a alien
+FROM
+  (SELECT START_DATE
+   FROM PROJECTS
+   WHERE START_DATE NOT IN
+       (SELECT END_DATE
+        FROM PROJECTS)) A
+JOIN
+  (SELECT END_DATE
+   FROM PROJECTS
+   WHERE END_DATE NOT IN
+       (SELECT START_DATE
+        FROM PROJECTS)) B
+    ON START_DATE < END_DATE
+GROUP BY START_DATE
+ORDER BY (MIN(END_DATE) - START_DATE), START_DATE;
+
+
+###########
