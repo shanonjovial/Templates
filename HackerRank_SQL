@@ -197,7 +197,10 @@ SELECT SUBMISSION_DATE,
 FROM   (SELECT DISTINCT submission_date FROM submissions) S1
 GROUP BY submission_date;
 
-
+########################### Weather Oberservation Station 11 - either not start or end with vowel ######################
+SELECT distinct CITY    ## 加 distinct 
+FROM STATION 
+WHERE (NOT REGEXP_LIKE (LOWER(CITY), '^[aeiou]')) OR (NOT REGEXP_LIKE(LOWER(CITY), '[aeiou]$'))
 
 ########################### Weather Oberservation Station 20 - median ######################
 A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
