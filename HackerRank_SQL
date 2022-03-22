@@ -193,8 +193,44 @@ SELECT SUBMISSION_DATE,
        (SELECT name FROM hackers
         WHERE  hacker_id = MAX_SUB_HACKER_ID
        ) AS NAME
-       
+
 FROM   (SELECT DISTINCT submission_date FROM submissions) S1
 GROUP BY submission_date;
+
+
+
+########################### Weather Oberservation Station 20 - median ######################
+A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
+
+# %% SOLUTION 1 %%%%
+select round(s.lat_n,4) 
+from station s 
+where (select round(count(id)/2)-1 from station) = 
+      (select count(s1.id) from station s1 where s1.lat_n > s.lat_n)
+      
+######### Print Prime Numbers #########
+# Write a query to print all prime numbers less than or equal to . Print your result on a single line, and use the ampersand () character as your separator (instead of a space).
+# For example, the output for all prime numbers  would be:
+
+SELECT GROUP_CONCAT(NUMB SEPARATOR '&')
+FROM (
+    SELECT @num:=@num+1 as NUMB FROM
+    information_schema.tables t1,
+    information_schema.tables t2,
+    (SELECT @num:=1) tmp
+) tempNum
+WHERE NUMB<=1000 AND NOT EXISTS(
+        SELECT * FROM (
+            SELECT @nu:=@nu+1 as NUMA FROM
+                information_schema.tables t1,
+                information_schema.tables t2,
+                (SELECT @nu:=1) tmp1
+                LIMIT 1000
+            ) tatata
+        WHERE FLOOR(NUMB/NUMA)=(NUMB/NUMA) AND NUMA<NUMB AND NUMA>1
+    )
+
+
+
 
 
