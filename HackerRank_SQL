@@ -236,9 +236,6 @@ WHERE (NOT REGEXP_LIKE (LOWER(CITY), '^[aeiou]')) OR (NOT REGEXP_LIKE(LOWER(CITY
 
       
 ######### Print Prime Numbers #########
-# Write a query to print all prime numbers less than or equal to . Print your result on a single line, and use the ampersand () character as your separator (instead of a space).
-# For example, the output for all prime numbers  would be:
-
 SELECT GROUP_CONCAT(NUMB SEPARATOR '&')
 FROM (
     SELECT @num:=@num+1 as NUMB FROM
@@ -257,7 +254,7 @@ WHERE NUMB<=1000 AND NOT EXISTS(
         WHERE FLOOR(NUMB/NUMA)=(NUMB/NUMA) AND NUMA<NUMB AND NUMA>1
         
         
-##########################
+################## Interviews ###############################
 SELECT C.contest_id, C.hacker_id, C.name, 
        SUM(S.total_submissions), SUM(S.total_accepted_submissions), 
        SUM(V.total_views), SUM(V.total_unique_views)
@@ -278,7 +275,6 @@ ORDER BY 1
 
 
 
-    )
 
 
 
