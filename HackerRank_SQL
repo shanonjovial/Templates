@@ -11,6 +11,19 @@ select repeat ('* ', @num:=@num+1)
 from information_schema.tables
 where @num<20
 
+########################### Weather Oberservation Station 11 - either not start or end with vowel ######################
+SELECT distinct CITY    ## 加 distinct 
+FROM STATION 
+WHERE (NOT REGEXP_LIKE (LOWER(CITY), '^[aeiou]')) OR (NOT REGEXP_LIKE(LOWER(CITY), '[aeiou]$'))
+
+########################### Weather Oberservation Station 20 - median ######################
+A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
+
+SELECT ROUND(S.LAT_N, 4) AS MEDIAN
+FROM STATION S
+WHERE (select floor(count(ID)/2) from Station S2) = 
+        (select count(ID) from Station S1 where S1.LAT_N > S.LAT_N)
+
 ################# The Blunder #################
 select ceil(avg(Salary) - avg(replace(Salary, '0', '')))
 from Employees
@@ -45,14 +58,6 @@ select round(sqrt(
                     power( Max(LONG_W)-Min(LONG_W), 2) ),4) as distance
 from STATION
 
-########################### Weather Oberservation Station 20 - median ######################
-A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
-
-SELECT ROUND(S.LAT_N, 4) AS MEDIAN
-FROM STATION S
-WHERE (select floor(count(ID)/2) from Station S2) = 
-        (select count(ID) from Station S1 where S1.LAT_N > S.LAT_N)
-
 
 ####### TOP COMPETITORS ##########
 ## Julia just finished conducting a coding contest, and she needs your help assembling the leaderboard! Write a query to print the respective hacker_id and name of hackers who achieved full scores for more than one challenge. Order your output in descending order by the total number of challenges in which the hacker earned a full score. If more than one hacker received full scores in same number of challenges, then sort them by ascending hacker_id.
@@ -68,7 +73,6 @@ FROM
     Group by H.hacker_id, H.name) K
 Where counts>1
 Order by counts DESC, 1 
-
 
 ######## Ollivander's Inventory ##########
 ## Harry Potter and his friends are at Ollivander's with Ron, finally replacing Charlie's old broken wand.
@@ -116,7 +120,6 @@ Group by S.hacker_id, H.name
 Having total_score >0
 Order by 3 desc, 1
 
-
 ########### SQL Project Planning ###########
 ## You are given a table, Projects, containing three columns: Task_ID, Start_Date and End_Date. It is guaranteed that the difference between the End_Date and the Start_Date is equal to 1 day for each row in the table.
 
@@ -151,7 +154,6 @@ FROM
 Join Students S on K.ID = S.ID
 ORDER by Fr_Salary
 
-
 ###########Symmetric Pairs ######################
 ## You are given a table, Functions, containing two columns: X and Y.
 ## Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
@@ -171,30 +173,6 @@ ORDER by Fr_Salary
     FROM FUNCTIONS F1, FUNCTIONS F2
     WHERE F1.X < F1.Y AND F1.X = F2.Y AND F1.Y = F2.X) K
 ORDER BY X, Y
-
-
-############################ Interviews #######################################
-## Samantha interviews many candidates from different colleges using coding challenges and contests. Write a query to print the contest_id, hacker_id, name, and the sums of total_submissions, total_accepted_submissions, total_views, and total_unique_views for each contest sorted by contest_id. Exclude the contest from the result if all four sums are .
-## Note: A specific contest can be used to screen candidates at more than one college, but each college only holds  screening contest.
-
-SELECT C.contest_id, C.hacker_id, C.name, 
-       SUM(S.total_submissions), SUM(S.total_accepted_submissions), 
-       SUM(V.total_views), SUM(V.total_unique_views)
-FROM Contests C
-JOIN Colleges CL ON C.contest_id = CL.contest_id
-JOIN Challenges CLG on CL.college_id = CLG.college_id
-LEFT JOIN (SELECT challenge_id, sum(total_views) as total_views, sum(total_unique_views) as total_unique_views
-      FROM View_Stats 
-      Group by challenge_id
-        ) V on CLG.challenge_id = V.challenge_id
-LEFT JOIN (SELECT challenge_id, sum(total_submissions) as total_submissions, sum(total_accepted_submissions) as total_accepted_submissions
-      FROM Submission_Stats
-      Group by challenge_id
-        ) S on CLG.challenge_id = S.challenge_id
-Group by C.contest_id, C.hacker_id, C.name
-HAVING (SUM(V.total_views)+SUM(total_unique_views) + SUM(total_submissions)+SUM(total_accepted_submissions)) >0
-ORDER BY 1
-
 
 ##################### 15 DAYS OF LEARNING SQL ##########################
 ## Julia conducted a  days of learning SQL contest. The start date of the contest was March 01, 2016 and the end date was March 15, 2016.
@@ -228,13 +206,7 @@ SELECT SUBMISSION_DATE,
 FROM   (SELECT DISTINCT submission_date FROM submissions) S1
 GROUP BY submission_date;
 
-########################### Weather Oberservation Station 11 - either not start or end with vowel ######################
-SELECT distinct CITY    ## 加 distinct 
-FROM STATION 
-WHERE (NOT REGEXP_LIKE (LOWER(CITY), '^[aeiou]')) OR (NOT REGEXP_LIKE(LOWER(CITY), '[aeiou]$'))
-
-
-      
+    
 ######### Print Prime Numbers #########
 SELECT GROUP_CONCAT(NUMB SEPARATOR '&')
 FROM (
