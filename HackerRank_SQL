@@ -255,23 +255,27 @@ WHERE NUMB<=1000 AND NOT EXISTS(
         
         
 ################## Interviews ###############################
-SELECT C.contest_id, C.hacker_id, C.name, 
-       SUM(S.total_submissions), SUM(S.total_accepted_submissions), 
-       SUM(V.total_views), SUM(V.total_unique_views)
-FROM Contests C
-JOIN Colleges CL ON C.contest_id = CL.contest_id
-JOIN Challenges CLG on CL.college_id = CLG.college_id
-LEFT JOIN (SELECT challenge_id, sum(total_views) as total_views, sum(total_unique_views) as total_unique_views
-      FROM View_Stats 
-      Group by challenge_id
-        ) V on CLG.challenge_id = V.challenge_id
-LEFT JOIN (SELECT challenge_id, sum(total_submissions) as total_submissions, sum(total_accepted_submissions) as total_accepted_submissions
-      FROM Submission_Stats
-      Group by challenge_id
-        ) S on CLG.challenge_id = S.challenge_id
-Group by C.contest_id, C.hacker_id, C.name
-HAVING (SUM(V.total_views)+SUM(total_unique_views) + SUM(total_submissions)+SUM(total_accepted_submissions)) >0
-ORDER BY 1
+Select C.contest_id, C.hacker_id, C.name, 
+        sum(S.total_submissions), 
+        sum(S.total_accepted_submissions), 
+        sum(V.total_views), 
+        sum(V.total_unique_views)
+From Contests C
+Join Colleges CLG on C.contest_id = CLG.contest_id
+Join Challenges CLL on CLG.college_id = CLL.college_id
+Left Join (select challenge_id, sum(total_views) as total_views, 
+                  sum(total_unique_views) as total_unique_views
+           from View_Stats
+           Group by 1)V on CLL.challenge_id = V.challenge_id
+Left Join ( select challenge_id, sum(total_submissions) as total_submissions, 
+            sum(total_accepted_submissions) as total_accepted_submissions
+            from Submission_Stats
+            Group by 1) S on CLL.challenge_id = S.challenge_id
+Group by 1,2,3
+Having (sum(S.total_submissions) +
+        sum(S.total_accepted_submissions)+
+        sum(V.total_views) +
+        sum(V.total_unique_views)>0)
 
 
 
